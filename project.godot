@@ -21,7 +21,7 @@ Levels="*res://Levels.gd"
 
 [display]
 
-window/size/height=800
+window/size/height=700
 
 [gui]
 

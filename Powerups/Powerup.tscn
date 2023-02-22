@@ -1,6 +1,11 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Powerups/Powerup.gd" type="Script" id=1]
+[ext_resource path="res://Assets/Powerup.png" type="Texture" id=2]
+[ext_resource path="res://Assets/star_silver.png" type="Texture" id=3]
+
+[sub_resource type="Curve" id=2]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.49505, 0.742045 ), 0.0, 0.0, 0, 0, Vector2( 0.975248, 0.105682 ), 0.0, 0.0, 0, 0 ]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 23, 23 )
@@ -8,11 +13,21 @@ extents = Vector2( 23, 23 )
 [node name="Powerup" type="Area2D"]
 script = ExtResource( 1 )
 
-[node name="ColorRect" type="ColorRect" parent="."]
-margin_left = -23.0
-margin_top = -23.0
-margin_right = 23.0
-margin_bottom = 23.0
+[node name="Sparkles" type="CPUParticles2D" parent="."]
+amount = 6
+lifetime = 0.5
+texture = ExtResource( 3 )
+direction = Vector2( 0, -50 )
+spread = 30.0
+gravity = Vector2( 0, 50 )
+initial_velocity = 300.0
+initial_velocity_random = 0.5
+angular_velocity = 100.0
+angular_velocity_random = 1.0
+scale_amount_curve = SubResource( 2 )
+
+[node name="ColorRect" type="Sprite" parent="."]
+texture = ExtResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )

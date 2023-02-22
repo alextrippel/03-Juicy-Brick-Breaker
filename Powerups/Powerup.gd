@@ -15,6 +15,7 @@ var velocity = Vector2.ZERO
 func _ready():
 	randomize()
 	payload = payloads[wrapi(randi(), 0, len(payloads))]
+	$Sparkles.emitting = true
 
 func _physics_process(_delta):
 	position += velocity

@@ -19,11 +19,18 @@ func _ready():
 		min_speed *= level["multiplier"]
 		max_speed *= level["multiplier"]
 	
+func _physics_process(_delta):
+	if $Highlight.modulate.a > 0 :
+		$Highlight.modulate.a -= .02
 
 func _on_Ball_body_entered(body):
 	if body.has_method("hit"):
 		body.hit(self)
-		accelerate = true	
+		$Bubbles.emitting = true
+		accelerate = true
+		if body.name == "Paddle" :
+			$Highlight.modulate.a = 1
+			self.angular_velocity *= -1
 
 func _input(event):
 	if not released and event.is_action_pressed("release"):
@@ -35,8 +42,18 @@ func _integrate_forces(state):
 		var paddle = get_node_or_null("/root/Game/Paddle_Container/Paddle")
 		if paddle != null:
 			state.transform.origin = Vector2(paddle.position.x + paddle.width, paddle.position.y - 30)	
+	var Comet_Container = get_node_or_null('/root/Game/Comet_Container')
+	if Comet_Container != null :
+		var comet = $Sprite.duplicate()
+		comet.position = global_position
+		comet.rotation = self.rotation
+		Comet_Container.add_child(comet)
 
 	if position.y > Global.VP.y + 100:
+		var die_sound = get_node_or_null('/root/Game/Die_Sound')
+		if die_sound != null :
+			if not die_sound.playing :
+				die_sound.play()
 		die()
 	if accelerate:
 		state.linear_velocity = state.linear_velocity * 1.1
@@ -49,8 +66,9 @@ func _integrate_forces(state):
 		state.linear_velocity = state.linear_velocity.normalized() * max_speed * speed_multiplier
 
 func change_size(s):
-	$ColorRect.rect_scale = s
+	$Sprite.scale = s
 	$CollisionShape2D.scale = s
+	$Highlight.scale = s*1.1
 
 func change_speed(s):
 	speed_multiplier = s
